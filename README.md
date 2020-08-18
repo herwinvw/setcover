@@ -8,4 +8,5 @@ Score: 18/60 points
 
 # Greedy solution
 
-Add the set that covers the most uncovered items for the least money.
+Recursively add the set that covers the most uncovered items for the lowest costs, until all items are covered.
+Score: 38/60 points
