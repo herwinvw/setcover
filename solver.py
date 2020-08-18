@@ -25,6 +25,8 @@
 
 
 from collections import namedtuple
+from greedy_solver import greedy_solver
+from trivial_solver import trivial_solver
 
 Set = namedtuple("Set", ['index', 'cost', 'items'])
 
@@ -41,19 +43,12 @@ def solve_it(input_data):
     sets = []
     for i in range(1, set_count+1):
         parts = lines[i].split()
-        sets.append(Set(i-1, float(parts[0]), map(int, parts[1:])))
+        sets.append(Set(i-1, float(parts[0]), set(map(int, parts[1:]))))
 
     # build a trivial solution
     # pick add sets one-by-one until all the items are covered
-    solution = [0]*set_count
-    coverted = set()
-    
-    for s in sets:
-        solution[s.index] = 1
-        coverted |= set(s.items)
-        if len(coverted) >= item_count:
-            break
-        
+    solution = greedy_solver(sets, item_count)
+
     # calculate the cost of the solution
     obj = sum([s.cost*solution[s.index] for s in sets])
 
