@@ -13,6 +13,8 @@ Score: 38/60 points
 
 ## MIP specification
 
-Minimize $$\sum_i c_ix_i$$
+Minimize sum_i(c[i] x[i])
 subject to
-$$\forall j: sum_i x_i cover_{i,j} >= 1$$
+forall j: sum_i x[i] cover[i,j] >= 1
+
+With cover[i,j] in {0,1}, indicating that set i covers j.
