@@ -13,6 +13,6 @@ Score: 38/60 points
 
 ## MIP specification
 
-Minimize $\sum_i c_ix_i$
+Minimize $$\sum_i c_ix_i$$
 subject to
-$\forall j: sum_i x_i cover_{i,j} >= 1$
+$$\forall j: sum_i x_i cover_{i,j} >= 1$$
