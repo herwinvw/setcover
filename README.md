@@ -10,3 +10,9 @@ Score: 18/60 points
 
 Recursively adds the set that covers the most uncovered items for the lowest costs per item, until all items are covered.
 Score: 38/60 points
+
+## MIP specification
+
+Minimize $\sum_i c_ix_i$
+subject to
+$\forall j: sum_i x_i cover_{i,j} >= 1$
