@@ -11,7 +11,7 @@ Score: 18/60 points
 Recursively adds the set that covers the most uncovered items for the lowest costs per item, until all items are covered.
 Score: 38/60 points
 
-# MIP specification
+# MIP solution
 
 Minimize sum_i(c[i] x[i])
 subject to
