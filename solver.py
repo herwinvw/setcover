@@ -27,6 +27,8 @@
 from collections import namedtuple
 from greedy_solver import greedy_solver
 from trivial_solver import trivial_solver
+from bb_solver import bb_solver
+from mip_solver import mip_solver
 
 Set = namedtuple("Set", ['index', 'cost', 'items'])
 
@@ -47,13 +49,16 @@ def solve_it(input_data):
 
     # build a trivial solution
     # pick add sets one-by-one until all the items are covered
-    solution = greedy_solver(sets, item_count)
+    #solution, optimal = bb_solver(sets, item_count, max_time = 60*60*5/6)
+    #solution, optimal = bb_solver(sets, item_count, max_time = 60)
+    start_solution = greedy_solver(sets, item_count)
+    solution, optimal = mip_solver(sets, item_count, start_solution, max_time = 600)
 
     # calculate the cost of the solution
     obj = sum([s.cost*solution[s.index] for s in sets])
 
     # prepare the solution in the specified output format
-    output_data = str(obj) + ' ' + str(0) + '\n'
+    output_data = str(obj) + ' ' + str(optimal) + '\n'
     output_data += ' '.join(map(str, solution))
 
     return output_data

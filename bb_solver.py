@@ -28,9 +28,9 @@ def _back_track(sets, current_taken, item_count):
 
 def get_covered(sets, current_taken):
     covered = set()
-    for i, s in enumerate(sets[0:len(current_taken)]):
-        if current_taken[i]:
-            covered |= s.items
+    for i, t in enumerate(current_taken):
+        if t:
+            covered |= sets[i].items
     return covered
 
 
@@ -61,7 +61,7 @@ def _bb_solve(sets, item_count, best_taken, best_cost, max_time):
 
         # every path on the branch leads to > best_value => backtrack
         min_cost = current_cost + \
-            opt_heuristic(sets[len(current_taken):item_count],
+            opt_heuristic(sets[len(current_taken):len(sets)],
                           covered, item_count)
         if min_cost > best_cost:
             backtrack = True
@@ -84,6 +84,12 @@ def _bb_solve(sets, item_count, best_taken, best_cost, max_time):
 
 
 def bb_solver(sets, item_count, max_time=None):
-    best_taken = greedy_solver(sets, item_count)
-    best_cost = get_cost(sets, best_taken)
-    return _bb_solve(sets, item_count, best_taken, best_cost, max_time)
+    sorted_sets = sorted(sets, key=lambda s: len(s.items)/s.cost, reverse=True)
+    best_taken = greedy_solver(sorted_sets, item_count)
+    best_cost = get_cost(sorted_sets, best_taken)
+    sorted_taken, optimal = _bb_solve(sorted_sets, item_count, best_taken, best_cost, max_time)
+    taken = [0]*len(sets)
+    for i,t in enumerate(sorted_taken):
+        taken[sorted_sets[i].index] = t
+
+    return taken, optimal
