@@ -18,3 +18,5 @@ subject to
 forall j: sum_i x[i] cover[i,j] >= 1
 
 With cover[i,j] in {0,1}, indicating that set i covers j.
+
+Score: 60/60
