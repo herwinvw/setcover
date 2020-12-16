@@ -1,5 +1,5 @@
 import time
-from greedy_solver import best_valued_set, greedy_solver
+from greedy_solver import greedy_solver
 
 
 def _is_valid(sets, current_taken, item_count):
@@ -37,10 +37,24 @@ def get_covered(sets, current_taken):
 def get_cost(sets, current_taken):
     return sum([sets[i].cost*t for i, t in enumerate(current_taken)])
 
-
 def opt_heuristic(remaining_sets, covered, item_count):
-    _, cost_per_item = best_valued_set(remaining_sets, covered)
-    return (item_count-len(covered))*cost_per_item
+    sorted_sets = sorted(remaining_sets, key=lambda s: len(s.items - covered)/s.cost, reverse=True)
+    
+    num_covered = len(covered)
+    cost = 0
+    for s in sorted_sets:
+        s_covered = len(s.items - covered)
+        remaining = item_count-num_covered
+        if remaining == 0:
+            break        
+        if s_covered < remaining:
+            num_covered += s_covered
+            cost += s.cost
+        else:
+            cost += (s.cost*remaining)/s_covered
+            break        
+        
+    return cost
 
 
 def _bb_solve(sets, item_count, best_taken, best_cost, max_time):
@@ -63,6 +77,7 @@ def _bb_solve(sets, item_count, best_taken, best_cost, max_time):
         min_cost = current_cost + \
             opt_heuristic(sets[len(current_taken):len(sets)],
                           covered, item_count)
+        
         if min_cost > best_cost:
             backtrack = True
 
@@ -78,16 +93,20 @@ def _bb_solve(sets, item_count, best_taken, best_cost, max_time):
             s = sets[len(current_taken)]
             covered |= s.items
             current_cost += s.cost
-            current_taken.append(1)
-
+            current_taken.append(1)            
+            
     return best_taken, optimal
 
 
 def bb_solver(sets, item_count, max_time=None):
-    sorted_sets = sorted(sets, key=lambda s: len(s.items)/s.cost, reverse=True)
+    sorted_sets = sorted(sets, key=lambda s: s.cost/len(s.items))
     best_taken = greedy_solver(sorted_sets, item_count)
     best_cost = get_cost(sorted_sets, best_taken)
-    sorted_taken, optimal = _bb_solve(sorted_sets, item_count, best_taken, best_cost, max_time)
+    sorted_best_taken = [0]*len(sets)
+    for i, s in enumerate(sorted_sets):
+        sorted_best_taken[i] = best_taken[s.index]
+        
+    sorted_taken, optimal = _bb_solve(sorted_sets, item_count, sorted_best_taken, best_cost, max_time)
     taken = [0]*len(sets)
     for i,t in enumerate(sorted_taken):
         taken[sorted_sets[i].index] = t
