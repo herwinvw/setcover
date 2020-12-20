@@ -50,7 +50,7 @@ def solve_it(input_data):
     # build a trivial solution
     # pick add sets one-by-one until all the items are covered
     #solution, optimal = bb_solver(sets, item_count, max_time = 60*60*5/6)
-    solution, optimal = bb_solver(sets, item_count, max_time = 600)
+    solution, optimal, _, _ = bb_solver(sets, item_count, max_time = 600)
     #start_solution = greedy_solver(sets, item_count)
     #solution, optimal = mip_solver(sets, item_count, start_solution, max_time = 600)
 
