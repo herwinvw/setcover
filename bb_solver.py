@@ -110,7 +110,8 @@ def bb_solver(sets, item_count, max_time=None):
     sorted_sets = sorted(sets, key=lambda s: s.cost/len(s.items))
     #sorted_sets = sorted(sets, key=lambda s: len(s.items), reverse=True)
     best_taken = greedy_solver(sorted_sets, item_count)
-    best_cost = get_cost(sorted_sets, best_taken)
+    best_cost = get_cost(sets, best_taken)
+    print("greedy costs: ", best_cost)
     sorted_best_taken = [0]*len(sets)
     for i, s in enumerate(sorted_sets):
         sorted_best_taken[i] = best_taken[s.index]

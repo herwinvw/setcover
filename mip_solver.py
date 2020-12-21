@@ -1,8 +1,9 @@
 from ortools.linear_solver import pywraplp
-
+#MIP_SOLUTION_LIMIT = 2000000
+MIP_SOLUTION_LIMIT = float("inf")
 
 def mip_solver(sets, item_count, start_solution, max_time):
-    if len(sets) > 2000000:
+    if len(sets) > MIP_SOLUTION_LIMIT:
         print("Too many sets for MIP-Solver: ",len(sets))
         return start_solution, 0
 
