@@ -95,9 +95,12 @@ def _bb_solve(sets, item_count, best_taken, best_cost, max_time):
                 current_cost = get_cost(sets, current_taken)
         else:
             s = sets[len(current_taken)]
-            covered |= s.items
-            current_cost += s.cost
-            current_taken.append(1)            
+            if s.items.issubset(covered):
+                current_taken.append(0)
+            else:
+                covered |= s.items
+                current_cost += s.cost
+                current_taken.append(1)            
         num_iterations += 1
     progress = sum([s * pow(2, (len(sets)-i)) for i,s in enumerate(current_taken)])
     return best_taken, optimal, num_iterations, progress
