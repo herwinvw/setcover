@@ -102,16 +102,20 @@ def _bb_solve(sets, item_count, best_taken, best_cost, max_time):
                 current_cost += s.cost
                 current_taken.append(1)            
         num_iterations += 1
-    progress = sum([s * pow(2, (len(sets)-i)) for i,s in enumerate(current_taken)])
+    if current_taken:
+        progress = sum([s * pow(2, (len(sets)-i)) for i,s in enumerate(current_taken)])
+    else:
+        progress = None
     return best_taken, optimal, num_iterations, progress
 
 
 def bb_solver(sets, item_count, max_time=None):
-    sorted_sets = sorted(sets, key=lambda s: s.cost/len(s.items))
-    #sorted_sets = sorted(sets, key=lambda s: len(s.items), reverse=True)
-    best_taken = greedy_solver(sorted_sets, item_count)
+    best_taken = greedy_solver(sets, item_count)
     best_cost = get_cost(sets, best_taken)
     print("greedy costs: ", best_cost)
+    
+    sorted_sets = sorted(sets, key=lambda s: s.cost/len(s.items))
+    #sorted_sets = sorted(sets, key=lambda s: len(s.items), reverse=True)    
     sorted_best_taken = [0]*len(sets)
     for i, s in enumerate(sorted_sets):
         sorted_best_taken[i] = best_taken[s.index]
