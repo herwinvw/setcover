@@ -29,9 +29,8 @@ def cp_solver(sets, item_count, start_solution, start_cost, max_time):
     status = solver.Solve(model)
     
     if (status == cp_model.OPTIMAL) | (status == cp_model.FEASIBLE):        
-        print('Total cost = ', solver.Objective().Value(), '\n')
         for s in sets:
-            solution[s.index] = int(x[s.index].solution_value())
+            solution[s.index] = solver.Value(x[s.index])
     else:
         print("submitting greedy solution")
     return solution, int(status == cp_model.OPTIMAL)
